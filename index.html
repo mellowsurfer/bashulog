@@ -140,21 +140,21 @@
 </head>
 <body>
 <div class="app">
-  <div class="topbar"><div class="logo">Bashulog</div><button class="action-btn" onclick="switchTab('add')">+</button></div>
+  <div class="topbar"><div class="logo">Bashulog</div><button class="action-btn" onclick="switchTab(\'add\')">+</button></div>
   <div id="pane-collection">
-    <div class="tabs"><button class="tb on" onclick="switchTab('collection')">My Shoes</button><button class="tb" onclick="switchTab('community')">Community</button></div>
+    <div class="tabs"><button class="tb on" onclick="switchTab(\'collection\')">My Shoes</button><button class="tb" onclick="switchTab(\'community\')">Community</button></div>
     <div class="sec-head"><div class="sec-title">My Collection</div><div class="sec-sub" id="coll-count"></div></div>
     <div id="shoe-list"></div>
   </div>
   <div id="pane-community" style="display:none">
-    <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb on" onclick="switchTab('community')">Community</button></div>
+    <div class="tabs"><button class="tb" onclick="switchTab(\'collection\')">My Shoes</button><button class="tb on" onclick="switchTab(\'community\')">Community</button></div>
     <div class="sec-head"><div class="sec-title">Latest Reviews</div></div>
     <div class="review-item"><div class="review-top"><div><div class="review-user">Kenta_Hoops</div><div class="review-shoe">Nike KD 18</div></div><div class="review-score">92</div></div><div class="review-text">アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。</div><div class="pills"><span class="pill">Grip</span><span class="pill">Stability</span><span class="pill">Heavy</span></div></div>
     <div class="review-item"><div class="review-top"><div><div class="review-user">Ryuta_PG</div><div class="review-shoe">Sabrina 3</div></div><div class="review-score">89</div></div><div class="review-text">軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。</div><div class="pills"><span class="pill">Lightweight</span><span class="pill">Speed</span><span class="pill">Cushion</span></div></div>
     <div class="review-item"><div class="review-top"><div><div class="review-user">Shonan_Baller</div><div class="review-shoe">Air Jordan 40</div></div><div class="review-score">85</div></div><div class="review-text">履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。</div><div class="pills"><span class="pill">Design</span><span class="pill">Cushion</span><span class="pill">Fit</span></div></div>
   </div>
   <div id="pane-add" style="display:none">
-    <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb" onclick="switchTab('community')">Community</button></div>
+    <div class="tabs"><button class="tb" onclick="switchTab(\'collection\')">My Shoes</button><button class="tb" onclick="switchTab(\'community\')">Community</button></div>
     <div class="add-wrap">
       <div class="add-title">Add New Shoe</div>
       <div class="field"><label>Search Shoe</label><div class="search-box"><input class="search-input" id="q" placeholder="Kobe, KD, Curry, Luka..." autocomplete="off" oninput="onSInput()" onfocus="onSFocus()" onblur="onSBlur()"><span class="search-ico" id="sico">?</span><button class="search-clear" id="sclear" onclick="clearQ()">x</button></div><div class="dd" id="dd"></div><div class="sel-card" id="selcard"><div><div class="sel-brand" id="selbrand"></div><div class="sel-name" id="selname"></div></div><button class="sel-remove" onclick="clearSel()">x</button></div></div>
@@ -184,7 +184,7 @@ function calcScore(s){return Math.round((s.c+s.g+s.f+s.w+s.s)/5*10)}
 function renderList(){
   var el=document.getElementById('shoe-list'),n=shoes.length;
   document.getElementById('coll-count').textContent=n?n+' pairs':'';
-  if(!n){el.innerHTML='<div class="empty"><div class="empty-icon">?</div><div class="empty-title">No shoes yet</div><div class="empty-text">Add your first pair to get started</div><button class="empty-btn" onclick="switchTab('add')">+ Add First Shoe</button></div>';return;}
+  if(!n){el.innerHTML='<div class="empty"><div class="empty-icon">?</div><div class="empty-title">No shoes yet</div><div class="empty-text">Add your first pair to get started</div><button class="empty-btn" onclick="switchTab(\'add\')">+ Add First Shoe</button></div>';return;}
   el.innerHTML='';
   shoes.forEach(function(s,i){
     var sc=calcScore(s),dots='<div class="score-dots">';
