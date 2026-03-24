@@ -213,7 +213,7 @@ function quickDel(i){currentIdx=i;confirmDel()}
 function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open')}
 function doDelete(){shoes.splice(currentIdx,1);save();closeConfirm();closeSheet();renderList();}
 function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});}
-function norm(s){return(s||'').toLowerCase().replace(/s+/g,'').replace(/[^a-z0-9]/g,'');}
+function norm(s){return(s||'').toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');}
 function matchScore(shoe,q){var nq=norm(q);if(!nq)return null;if(norm(shoe.b+shoe.n).includes(nq))return 100;if(nq.length>=2&&norm(shoe.n).includes(nq))return 90;for(var i=0;i<shoe.k.length;i++){if(norm(shoe.k[i]).includes(nq)||(nq.length>=2&&nq.includes(norm(shoe.k[i]))))return 80;}return null;}
 function onSInput(){
   var q=document.getElementById('q').value;
@@ -223,8 +223,8 @@ function onSInput(){
   var res=DB.map(function(s){return{shoe:s,sc:matchScore(s,q)}}).filter(function(r){return r.sc!==null}).sort(function(a,b){return b.sc-a.sc}).slice(0,10);
   var dd=document.getElementById('dd');dd.classList.add('open');
   var html=res.length?'<div class="dd-head">Matches ('+res.length+')</div>':'';
-  res.forEach(function(r){var bn=r.shoe.b.replace(/'/g,"\'"),nn=r.shoe.n.replace(/'/g,"\'");html+='<div class="dd-opt" onmousedown="selShoe(''+bn+'',''+nn+'')"><div><div class="dd-brand">'+r.shoe.b+'</div><div class="dd-name">'+r.shoe.n+'</div></div></div>';});
-  html+='<div class="dd-opt" onmousedown="selShoe('Custom',''+q.replace(/'/g,"\'")+'')"><div><div class="dd-brand">Not found?</div><div class="dd-name">Add "'+q+'" as new</div></div><div class="dd-new">+NEW</div></div>';
+  res.forEach(function(r){var bn=r.shoe.b.replace(/'/g,"\'"),nn=r.shoe.n.replace(/'/g,"\'");html+='<div class="dd-opt" data-brand="'+bn+'" data-name="'+nn+'" onmousedown="selShoe(this.dataset.brand,this.dataset.name)"><div><div class="dd-brand">'+r.shoe.b+'</div><div class="dd-name">'+r.shoe.n+'</div></div></div>';});
+  html+='<div class="dd-opt" data-brand="Custom" data-name="'+q.replace(/"/g,'&amp;quot;')+'" onmousedown="selShoe(this.dataset.brand,this.dataset.name)"><div><div class="dd-brand">Not found?</div><div class="dd-name">Add "'+q+'" as new</div></div><div class="dd-new">+NEW</div></div>';
   dd.innerHTML=html;
 }
 function onSFocus(){if(document.getElementById('q').value)onSInput()}
