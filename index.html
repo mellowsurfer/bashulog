@@ -136,7 +136,7 @@
     .submit:disabled{opacity:.4;cursor:not-allowed}
     .scroll-hint{display:flex;justify-content:center;padding:20px;border-top:1px solid var(--border)}
     .scroll-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px}
-  </style>
+ .period-picker{display:flex;gap:12px;margin-bottom:6px}.period-col{flex:1;position:relative}.period-col-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:4px}.pscroll-wrap{position:relative;border:1px solid var(--border2);border-radius:4px;overflow:hidden}.pscroll{height:150px;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.pscroll::-webkit-scrollbar{display:none}.pitem{height:50px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:13px;color:var(--muted2);transition:color .1s;user-select:none}.pitem.active{font-family:'DM Serif Display',serif;font-size:21px;color:var(--ink)}.pitem.pad{scroll-snap-align:none;visibility:hidden}.pscroll-wrap::before,.pscroll-wrap::after{content:'';position:absolute;left:0;right:0;height:50px;pointer-events:none;z-index:2}.pscroll-wrap::before{top:0;background:linear-gradient(to bottom,var(--bg) 10%,transparent 100%)}.pscroll-wrap::after{bottom:0;background:linear-gradient(to top,var(--bg) 10%,transparent 100%)}.pscroll-center{position:absolute;top:50px;left:0;right:0;height:50px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);pointer-events:none;z-index:1}  </style>
 </head>
 <body>
 <div class="app">
@@ -159,7 +159,7 @@
       <div class="add-title">Add New Shoe</div>
       <div class="field"><label>Search Shoe</label><div class="search-box"><input class="search-input" id="q" placeholder="Kobe, KD, Curry, Luka..." autocomplete="off" oninput="onSInput()" onfocus="onSFocus()" onblur="onSBlur()"><span class="search-ico" id="sico">?</span><button class="search-clear" id="sclear" onclick="clearQ()">x</button></div><div class="dd" id="dd"></div><div class="sel-card" id="selcard"><div><div class="sel-brand" id="selbrand"></div><div class="sel-name" id="selname"></div></div><button class="sel-remove" onclick="clearSel()">x</button></div></div>
       <div class="photo-drop" onclick="document.getElementById('fup').click()"><img class="prev" id="prev-img" style="display:none"><div id="ph-ph" style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:28px;opacity:.2">+</span><div class="photo-lbl">Add Photo (optional)</div></div><input type="file" id="fup" accept="image/*" style="display:none" onchange="handleImg(this)"></div>
-      <div class="field"><label>Period</label><input id="fp" placeholder="2024-present"></div>
+      <div class="field"><label>Period</label><div class="period-picker"><div class="period-col"><div class="period-col-lbl">年</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="year-scroll"></div></div></div><div class="period-col"><div class="period-col-lbl">月</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="month-scroll"></div></div></div></div><input type="hidden" id="fp"></div>
       <div class="field"><label>Comment</label><textarea id="fc" placeholder="Fit, feel, pros, cons..."></textarea></div>
       <div class="score-lbl">Score</div>
       <div class="srow"><div class="srow-top"><span class="srow-cat">Cushion</span><span class="srow-val" id="sv0">8</span></div><input type="range" min="1" max="10" value="8" step="1" id="sr0" oninput="sv('sv0',this.value);rc()"></div>
@@ -231,7 +231,7 @@ function onSFocus(){if(document.getElementById('q').value)onSInput()}
 function onSBlur(){setTimeout(function(){document.getElementById('dd').classList.remove('open')},180)}
 function clearQ(){document.getElementById('q').value='';document.getElementById('dd').classList.remove('open');document.getElementById('sclear').style.display='none';document.getElementById('sico').style.display='flex';}
 function selShoe(brand,name){selectedShoe={brand:brand,name:name};document.getElementById('selbrand').textContent=brand;document.getElementById('selname').textContent=name;document.getElementById('selcard').classList.add('show');clearQ();document.getElementById('submit-btn').disabled=false;}
-function clearSel(){selectedShoe=null;document.getElementById('selcard').classList.remove('show');document.getElementById('submit-btn').disabled=true;}
+function clearSel(){selectedShoe=null;document.getElementById('selcard').classList.remove('show');function initPeriodPicker(){var n=new Date(),cy=n.getFullYear(),cm=n.getMonth()+1;var ys=document.getElementById('year-scroll'),ms=document.getElementById('month-scroll');if(!ys||!ms)return;var yrs=[];for(var y=2015;y<=cy+1;y++)yrs.push(y);ys.innerHTML='<div class="pitem pad"></div>';yrs.forEach(function(y){ys.innerHTML+='<div class="pitem" data-v="'+y+'">'+y+'</div>';});ys.innerHTML+='<div class="pitem pad"></div>';var mns=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];ms.innerHTML='<div class="pitem pad"></div>';mns.forEach(function(m,i){ms.innerHTML+='<div class="pitem" data-v="'+(i+1)+'">'+m+'</div>';});ms.innerHTML+='<div class="pitem pad"></div>';function gi(el){return Math.round(el.scrollTop/50);}function ua(el){var idx=gi(el);el.querySelectorAll('.pitem').forEach(function(it,i){it.classList.toggle('active',i===idx+1);});}function ufp(){var yi=gi(ys),mi=gi(ms);var ya=ys.querySelectorAll('.pitem[data-v]'),ma=ms.querySelectorAll('.pitem[data-v]');var yv=ya[yi]?ya[yi].dataset.v:'',mv=ma[mi]?ma[mi].dataset.v:'';document.getElementById('fp').value=yv+'年'+mv+'月〜';}function os(el){clearTimeout(el._t);el._t=setTimeout(function(){var s=Math.round(el.scrollTop/50)*50;if(Math.abs(el.scrollTop-s)>1)el.scrollTo({top:s,behavior:'smooth'});ua(el);ufp();},80);ua(el);}ys.addEventListener('scroll',function(){os(ys);});ms.addEventListener('scroll',function(){os(ms);});var yi=yrs.indexOf(cy);if(yi<0)yi=yrs.length-1;ys.scrollTop=yi*50;ms.scrollTop=(cm-1)*50;setTimeout(function(){ua(ys);ua(ms);ufp();},50);} document.getElementById('submit-btn').disabled=true;}
 function handleImg(input){var f=input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){pendingImg=e.target.result;document.getElementById('prev-img').src=pendingImg;document.getElementById('prev-img').style.display='block';document.getElementById('ph-ph').style.display='none';};r.readAsDataURL(f);}
 function sv(id,v){document.getElementById(id).textContent=v}
 function rc(){var vals=[0,1,2,3,4].map(function(i){return+document.getElementById('sr'+i).value});document.getElementById('tnum').textContent=Math.round(vals.reduce(function(a,b){return a+b},0)/5*10);}
@@ -240,7 +240,7 @@ function addShoe(){
   shoes.unshift({brand:selectedShoe.brand,model:selectedShoe.name,period:document.getElementById('fp').value||'-',comment:document.getElementById('fc').value||'',c:+document.getElementById('sr0').value,g:+document.getElementById('sr1').value,f:+document.getElementById('sr2').value,w:+document.getElementById('sr3').value,s:+document.getElementById('sr4').value,img:pendingImg,});
   save();selectedShoe=null;pendingImg='';
   document.getElementById('selcard').classList.remove('show');document.getElementById('prev-img').style.display='none';document.getElementById('ph-ph').style.display='flex';
-  ['fp','fc'].forEach(function(id){document.getElementById(id).value=''});
+  document.getElementById('fc').value='';initPeriodPicker();
   [0,1,2,3,4].forEach(function(i){var def=[8,8,8,7,8][i];document.getElementById('sr'+i).value=def;document.getElementById('sv'+i).textContent=def;});
   document.getElementById('tnum').textContent=78;document.getElementById('submit-btn').disabled=true;
   renderList();switchTab('collection');
@@ -248,6 +248,7 @@ function addShoe(){
 document.getElementById('submit-btn').disabled=true;
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 renderList();
+initPeriodPicker();
 </script>
 </body>
 </html><!DOCTYPE html>
