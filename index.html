@@ -212,7 +212,7 @@ function confirmDel(){var s=shoes[currentIdx];document.getElementById('confirm-t
 function quickDel(i){currentIdx=i;confirmDel()}
 function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open')}
 function doDelete(){shoes.splice(currentIdx,1);save();closeConfirm();closeSheet();renderList();}
-function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});}
+function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});if(name==='add')initPeriodPicker();}
 function norm(s){return(s||'').toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');}
 function matchScore(shoe,q){var nq=norm(q);if(!nq)return null;if(norm(shoe.b+shoe.n).includes(nq))return 100;if(nq.length>=2&&norm(shoe.n).includes(nq))return 90;for(var i=0;i<shoe.k.length;i++){if(norm(shoe.k[i]).includes(nq)||(nq.length>=2&&nq.includes(norm(shoe.k[i]))))return 80;}return null;}
 function onSInput(){
@@ -230,13 +230,13 @@ function onSInput(){
 function onSFocus(){if(document.getElementById('q').value)onSInput()}
 function onSBlur(){setTimeout(function(){document.getElementById('dd').classList.remove('open')},180)}
 function clearQ(){document.getElementById('q').value='';document.getElementById('dd').classList.remove('open');document.getElementById('sclear').style.display='none';document.getElementById('sico').style.display='flex';}
-function selShoe(brand,name){selectedShoe={brand:brand,name:name};document.getElementById('selbrand').textContent=brand;document.getElementById('selname').textContent=name;document.getElementById('selcard').classList.add('show');clearQ();document.getElementById('submit-btn').disabled=false;}
-function clearSel(){selectedShoe=null;document.getElementById('selcard').classList.remove('show');document.getElementById('submit-btn').disabled=true;}
+function selShoe(brand,name){selectedShoe={brand:brand,name:name};document.getElementById('selbrand').textContent=brand;document.getElementById('selname').textContent=name;document.getElementById('selcard').classList.add('show');clearQ();}
+function clearSel(){selectedShoe=null;document.getElementById('selcard').classList.remove('show');}
 function handleImg(input){var f=input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){pendingImg=e.target.result;document.getElementById('prev-img').src=pendingImg;document.getElementById('prev-img').style.display='block';document.getElementById('ph-ph').style.display='none';};r.readAsDataURL(f);}
 function sv(id,v){document.getElementById(id).textContent=v}
 function rc(){var vals=[0,1,2,3,4].map(function(i){return+document.getElementById('sr'+i).value});document.getElementById('tnum').textContent=Math.round(vals.reduce(function(a,b){return a+b},0)/5*10);}
 function addShoe(){
-  if(!selectedShoe){alert('Please search and select a shoe');return}
+  if(!selectedShoe){alert('シューズを検索・選択してください');return}
   shoes.unshift({brand:selectedShoe.brand,model:selectedShoe.name,period:document.getElementById('fp').value||'-',comment:document.getElementById('fc').value||'',c:+document.getElementById('sr0').value,g:+document.getElementById('sr1').value,f:+document.getElementById('sr2').value,w:+document.getElementById('sr3').value,s:+document.getElementById('sr4').value,img:pendingImg,});
   save();selectedShoe=null;pendingImg='';
   document.getElementById('selcard').classList.remove('show');document.getElementById('prev-img').style.display='none';document.getElementById('ph-ph').style.display='flex';
@@ -245,7 +245,6 @@ function addShoe(){
   document.getElementById('tnum').textContent=78;document.getElementById('submit-btn').disabled=true;
   renderList();switchTab('collection');
 }
-document.getElementById('submit-btn').disabled=true;
 function initPeriodPicker(){var n=new Date(),cy=n.getFullYear(),cm=n.getMonth()+1;var sy=document.getElementById('sy-scroll'),sm=document.getElementById('sm-scroll'),ey=document.getElementById('ey-scroll'),em=document.getElementById('em-scroll');if(!sy||!sm||!ey||!em)return;var yrs=[];for(var y=2015;y<=cy+1;y++)yrs.push(y);var mns=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];function buildY(el,wp){el.innerHTML='<div class="pitem pad"></div>';yrs.forEach(function(y){el.innerHTML+='<div class="pitem" data-v="'+y+'">'+y+'</div>';});if(wp)el.innerHTML+='<div class="pitem" data-v="present">現在</div>';el.innerHTML+='<div class="pitem pad"></div>';}function buildM(el){el.innerHTML='<div class="pitem pad"></div>';mns.forEach(function(m,i){el.innerHTML+='<div class="pitem" data-v="'+(i+1)+'">'+m+'</div>';});el.innerHTML+='<div class="pitem pad"></div>';}buildY(sy,false);buildM(sm);buildY(ey,true);buildM(em);function gi(el){return Math.round(el.scrollTop/40);}function ua(el){var idx=gi(el);el.querySelectorAll('.pitem').forEach(function(it,i){it.classList.toggle('active',i===idx+1);});}function ufp(){var syi=gi(sy),smi=gi(sm),eyi=gi(ey),emi=gi(em);var sya=sy.querySelectorAll('.pitem[data-v]'),sma=sm.querySelectorAll('.pitem[data-v]'),eya=ey.querySelectorAll('.pitem[data-v]'),ema=em.querySelectorAll('.pitem[data-v]');var syv=sya[syi]?sya[syi].dataset.v:'',smv=sma[smi]?sma[smi].dataset.v:'',eyv=eya[eyi]?eya[eyi].dataset.v:'',emv=ema[emi]?ema[emi].dataset.v:'';var emcol=document.getElementById('em-col');if(eyv==='present'){if(emcol)emcol.style.visibility='hidden';document.getElementById('fp').value=syv+'年'+smv+'月～現在';}else{if(emcol)emcol.style.visibility='visible';document.getElementById('fp').value=syv+'年'+smv+'月～'+eyv+'年'+emv+'月';}}function os(el){clearTimeout(el._t);el._t=setTimeout(function(){var s=Math.round(el.scrollTop/40)*40;if(Math.abs(el.scrollTop-s)>1)el.scrollTo({top:s,behavior:'smooth'});ua(el);ufp();},80);ua(el);}sy.addEventListener('scroll',function(){os(sy);});sm.addEventListener('scroll',function(){os(sm);});ey.addEventListener('scroll',function(){os(ey);});em.addEventListener('scroll',function(){os(em);});var syd=yrs.indexOf(cy);if(syd<0)syd=yrs.length-1;sy.scrollTop=syd*40;sm.scrollTop=(cm-1)*40;ey.scrollTop=yrs.length*40;em.scrollTop=(cm-1)*40;setTimeout(function(){ua(sy);ua(sm);ua(ey);ua(em);ufp();},50);}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 renderList();
