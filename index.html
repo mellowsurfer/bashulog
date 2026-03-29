@@ -1,16 +1,4 @@
-
-var COMMUNITY=[
-  {user:'Kenta_Hoops',shoe:'Nike KD 18',score:92,text:'アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。',pills:['Grip','Stability','Heavy']},
-  {user:'Ryuta_PG',shoe:'Sabrina 3',score:89,text:'軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。',pills:['Lightweight','Speed','Cushion']},
-  {user:'Shonan_Baller',shoe:'Air Jordan 40',score:85,text:'履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。',pills:['Design','Cushion','Fit']},
-  {user:'Osaka_Wing',shoe:'Nike Kobe 8 Protro',score:91,text:'軽さと反応速度が最高。アウトソールのパターンが特にコートでのグリップに貢献。コービーモデルの中でも一番バランスが取れてる。',pills:['Lightweight','Grip','Responsive']},
-  {user:'Sapporo_Big',shoe:'Under Armour Curry 12',score:88,text:'カリーのシグネチャーモデルで一番しっくりきた。ミッドソールのクッションが長時間プレーでも足が疲れない。',pills:['Cushion','Fit','Durable']},
-];
-var commFilter=false;
-function normShoe(s){return(s||'').toLowerCase().replace(/s+/g,'').replace(/[^a-z0-9]/g,'');}
-function isMyShoe(communityShoe){var cn=normShoe(communityShoe);return shoes.some(function(s){var model=normShoe(s.model);return cn.includes(model)||normShoe(s.brand+s.model)===cn;});}
-function toggleCommFilter(){commFilter=!commFilter;renderCommunity();}
-function renderCommunity(){var btn=document.getElementById('comm-filter-btn');if(btn)btn.classList.toggle('on',commFilter);var list=document.getElementById('review-list');if(!list)return;var data=commFilter?COMMUNITY.filter(function(r){return isMyShoe(r.shoe);}):COMMUNITY;if(!data.length){list.innerHTML='<div class="empty"><div class="empty-icon">👟</div><div class="empty-title">No matches</div><div class="empty-text">コレクションと一致するレビューが見つかりませんでした</div></div>';return;}list.innerHTML=data.map(function(r){var mine=isMyShoe(r.shoe);var badge=mine?'<span class="match-badge">MY SHOES</span>':''  ;var pills=r.pills.map(function(p){return'<span class="pill">'+p+'</span>';}).join('');return'<div class="review-item'+(mine?' review-match':'')+'"><div class="review-top"><div><div class="review-user">'+r.user+badge+'</div><div class="review-shoe">'+r.shoe+'</div></div><div class="review-score">'+r.score+'</div></div><div class="review-text">'+r.text+'</div><div class="pills">'+pills+'</div></div>';}).join('');}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -186,6 +174,18 @@ function renderCommunity(){var btn=document.getElementById('comm-filter-btn');if
 </div>
 <script>
 var DB=[{b:'Nike',n:'Kobe 8 Protro',k:['kobe8','kobe','protro','viii']},{b:'Nike',n:'Kobe 6 Protro',k:['kobe6','vi']},{b:'Nike',n:'LeBron 21',k:['lebron21','lebron','lbj']},{b:'Nike',n:'LeBron 22',k:['lebron22']},{b:'Nike',n:'KD 18',k:['kd18','kd','durant']},{b:'Nike',n:'KD 17',k:['kd17']},{b:'Nike',n:'Zoom Freak 6',k:['freak6','giannis']},{b:'Nike',n:'PG 8',k:['pg8','pg']},{b:'Nike',n:'Kyrie Flytrap 6',k:['kyrie','flytrap']},{b:'Nike',n:'Sabrina 3',k:['sabrina3','sabrina','ionescu']},{b:'Nike',n:'Sabrina 2',k:['sabrina2']},{b:'Nike',n:'Book 1',k:['book1','booker']},{b:'Nike',n:'Air Jordan 40',k:['aj40','jordan40']},{b:'Nike',n:'Air Jordan 39',k:['aj39','jordan39']},{b:'Nike',n:'Zoom GT Cut 3',k:['gtcut3','gtcut']},{b:'Jordan Brand',n:'Luka 3',k:['luka3','luka','doncic']},{b:'Jordan Brand',n:'Luka 2',k:['luka2']},{b:'Jordan Brand',n:'Tatum 3',k:['tatum3','tatum']},{b:'Jordan Brand',n:'Zion 3',k:['zion3','zion']},{b:'Under Armour',n:'Curry 12',k:['curry12','curry','steph']},{b:'Under Armour',n:'Curry 11',k:['curry11']},{b:'Under Armour',n:'Curry 10',k:['curry10']},{b:'Under Armour',n:'Flow Breakthru 5',k:['breakthru5','breakthru']},{b:'Adidas',n:'Harden Vol. 8',k:['harden8','harden']},{b:'Adidas',n:'Trae Young 3',k:['trae3','trae']},{b:'Adidas',n:'D.O.N. Issue 6',k:['don6','mitchell','donovan']},{b:'Adidas',n:'Anthony Edwards 1',k:['ae1','edwards']},{b:'Adidas',n:'Anthony Edwards 2',k:['ae2']},{b:'Puma',n:'MB.04',k:['mb04','lamelo']},{b:'Puma',n:'MB.03',k:['mb03']},{b:'Puma',n:'Scoot Zeros',k:['scoot','henderson']},{b:'New Balance',n:'TWO WXY v5',k:['twowxy5','twowxy']},{b:'New Balance',n:'Kawhi 4',k:['kawhi4','kawhi','leonard']},{b:'ASICS',n:'Nova Surge 3',k:['novasurge3','novasurge']},{b:'ASICS',n:'Nova Surge 2',k:['novasurge2']},{b:'ASICS',n:'Unpre Amps',k:['unpre','amps']},{b:'ASICS',n:'Gel-Burst 25',k:['gelburst','gelburst25']},{b:'ASICS',n:'Gel-Hoop V17',k:['gelhoop','gelhoop17']},{b:'Mizuno',n:'Wave Momentum 3',k:['momentum3','momentum']},{b:'Li-Ning',n:'Way of Wade 12',k:['wade12','wade']},{b:'Anta',n:'KT9',k:['kt9','klay']},{b:'Anta',n:'KT8',k:['kt8']},];
+var COMMUNITY=[
+  {user:'Kenta_Hoops',shoe:'Nike KD 18',score:92,text:'アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。',pills:['Grip','Stability','Heavy']},
+  {user:'Ryuta_PG',shoe:'Sabrina 3',score:89,text:'軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。',pills:['Lightweight','Speed','Cushion']},
+  {user:'Shonan_Baller',shoe:'Air Jordan 40',score:85,text:'履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。',pills:['Design','Cushion','Fit']},
+  {user:'Osaka_Wing',shoe:'Nike Kobe 8 Protro',score:91,text:'軽さと反応速度が最高。アウトソールのパターンが特にコートでのグリップに貢献。コービーモデルの中でも一番バランスが取れてる。',pills:['Lightweight','Grip','Responsive']},
+  {user:'Sapporo_Big',shoe:'Under Armour Curry 12',score:88,text:'カリーのシグネチャーモデルで一番しっくりきた。ミッドソールのクッションが長時間プレーでも足が疲れない。',pills:['Cushion','Fit','Durable']},
+];
+var commFilter=false;
+function normShoe(s){return(s||'').toLowerCase().replace(/s+/g,'').replace(/[^a-z0-9]/g,'');}
+function isMyShoe(cs){var cn=normShoe(cs);return shoes.some(function(s){return cn.includes(normShoe(s.model));});}
+function toggleCommFilter(){commFilter=!commFilter;renderCommunity();}
+function renderCommunity(){var btn=document.getElementById('comm-filter-btn');if(btn)btn.classList.toggle('on',commFilter);var list=document.getElementById('review-list');if(!list)return;var data=commFilter?COMMUNITY.filter(function(r){return isMyShoe(r.shoe);}):COMMUNITY;if(!data.length){list.innerHTML='<div class="empty"><div class="empty-title">No matches</div><div class="empty-text">コレクションと一致するレビューが見つかりませんでした</div></div>';return;}list.innerHTML=data.map(function(r){var mine=isMyShoe(r.shoe);var badge=mine?'<span class="match-badge">MY SHOES</span>':'';var pills=r.pills.map(function(p){return'<span class="pill">'+p+'</span>';}).join('');return'<div class="review-item'+(mine?' review-match':'')+'"><div class="review-top"><div><div class="review-user">'+r.user+badge+'</div><div class="review-shoe">'+r.shoe+'</div></div><div class="review-score">'+r.score+'</div></div><div class="review-text">'+r.text+'</div><div class="pills">'+pills+'</div></div>';}).join('');}
 var shoes=JSON.parse(localStorage.getItem('bashulog_shoes')||'[]');
 var currentIdx=-1,selectedShoe=null,pendingImg='';
 var cats=[{k:'c',l:'Cushion'},{k:'g',l:'Grip'},{k:'f',l:'Fit'},{k:'w',l:'Weight'},{k:'s',l:'Support'}];
