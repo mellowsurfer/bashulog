@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+
+var COMMUNITY=[
+  {user:'Kenta_Hoops',shoe:'Nike KD 18',score:92,text:'アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。',pills:['Grip','Stability','Heavy']},
+  {user:'Ryuta_PG',shoe:'Sabrina 3',score:89,text:'軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。',pills:['Lightweight','Speed','Cushion']},
+  {user:'Shonan_Baller',shoe:'Air Jordan 40',score:85,text:'履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。',pills:['Design','Cushion','Fit']},
+  {user:'Osaka_Wing',shoe:'Nike Kobe 8 Protro',score:91,text:'軽さと反応速度が最高。アウトソールのパターンが特にコートでのグリップに貢献。コービーモデルの中でも一番バランスが取れてる。',pills:['Lightweight','Grip','Responsive']},
+  {user:'Sapporo_Big',shoe:'Under Armour Curry 12',score:88,text:'カリーのシグネチャーモデルで一番しっくりきた。ミッドソールのクッションが長時間プレーでも足が疲れない。',pills:['Cushion','Fit','Durable']},
+];
+var commFilter=false;
+function normShoe(s){return(s||'').toLowerCase().replace(/s+/g,'').replace(/[^a-z0-9]/g,'');}
+function isMyShoe(communityShoe){var cn=normShoe(communityShoe);return shoes.some(function(s){var model=normShoe(s.model);return cn.includes(model)||normShoe(s.brand+s.model)===cn;});}
+function toggleCommFilter(){commFilter=!commFilter;renderCommunity();}
+function renderCommunity(){var btn=document.getElementById('comm-filter-btn');if(btn)btn.classList.toggle('on',commFilter);var list=document.getElementById('review-list');if(!list)return;var data=commFilter?COMMUNITY.filter(function(r){return isMyShoe(r.shoe);}):COMMUNITY;if(!data.length){list.innerHTML='<div class="empty"><div class="empty-icon">👟</div><div class="empty-title">No matches</div><div class="empty-text">コレクションと一致するレビューが見つかりませんでした</div></div>';return;}list.innerHTML=data.map(function(r){var mine=isMyShoe(r.shoe);var badge=mine?'<span class="match-badge">MY SHOES</span>':''  ;var pills=r.pills.map(function(p){return'<span class="pill">'+p+'</span>';}).join('');return'<div class="review-item'+(mine?' review-match':'')+'"><div class="review-top"><div><div class="review-user">'+r.user+badge+'</div><div class="review-shoe">'+r.shoe+'</div></div><div class="review-score">'+r.score+'</div></div><div class="review-text">'+r.text+'</div><div class="pills">'+pills+'</div></div>';}).join('');}<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -136,7 +148,7 @@
     .submit:disabled{opacity:.4;cursor:not-allowed}
     .scroll-hint{display:flex;justify-content:center;padding:20px;border-top:1px solid var(--border)}
     .scroll-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px}
- .period-range{margin-bottom:6px}.period-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}.period-row-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);width:28px;flex-shrink:0;padding-top:22px;text-align:center}.period-picker{display:flex;gap:8px;flex:1}.period-col{flex:1;position:relative}.period-col-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:4px}.pscroll-wrap{position:relative;border:1px solid var(--border2);border-radius:4px;overflow:hidden}.pscroll{height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.pscroll::-webkit-scrollbar{display:none}.pitem{height:40px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:12px;color:var(--muted2);transition:color .1s;user-select:none}.pitem.active{font-family:'DM Serif Display',serif;font-size:18px;color:var(--ink)}.pitem.pad{scroll-snap-align:none;visibility:hidden}.pscroll-wrap::before,.pscroll-wrap::after{content:'';position:absolute;left:0;right:0;height:40px;pointer-events:none;z-index:2}.pscroll-wrap::before{top:0;background:linear-gradient(to bottom,var(--bg) 10%,transparent 100%)}.pscroll-wrap::after{bottom:0;background:linear-gradient(to top,var(--bg) 10%,transparent 100%)}.pscroll-center{position:absolute;top:40px;left:0;right:0;height:40px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);pointer-events:none;z-index:1}  </style>
+ .period-range{margin-bottom:6px}.period-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}.period-row-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);width:28px;flex-shrink:0;padding-top:22px;text-align:center}.period-picker{display:flex;gap:8px;flex:1}.period-col{flex:1;position:relative}.period-col-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:4px}.pscroll-wrap{position:relative;border:1px solid var(--border2);border-radius:4px;overflow:hidden}.pscroll{height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.pscroll::-webkit-scrollbar{display:none}.pitem{height:40px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:12px;color:var(--muted2);transition:color .1s;user-select:none}.pitem.active{font-family:'DM Serif Display',serif;font-size:18px;color:var(--ink)}.pitem.pad{scroll-snap-align:none;visibility:hidden}.pscroll-wrap::before,.pscroll-wrap::after{content:'';position:absolute;left:0;right:0;height:40px;pointer-events:none;z-index:2}.pscroll-wrap::before{top:0;background:linear-gradient(to bottom,var(--bg) 10%,transparent 100%)}.pscroll-wrap::after{bottom:0;background:linear-gradient(to top,var(--bg) 10%,transparent 100%)}.pscroll-center{position:absolute;top:40px;left:0;right:0;height:40px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);pointer-events:none;z-index:1}.filter-chip{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .15s}.filter-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}.match-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--ink);color:#fff;margin-left:8px;vertical-align:middle}.review-match{background:var(--bg2)}  </style>
 </head>
 <body>
 <div class="app">
@@ -148,10 +160,8 @@
   </div>
   <div id="pane-community" style="display:none">
     <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb on" onclick="switchTab('community')">Community</button></div>
-    <div class="sec-head"><div class="sec-title">Latest Reviews</div></div>
-    <div class="review-item"><div class="review-top"><div><div class="review-user">Kenta_Hoops</div><div class="review-shoe">Nike KD 18</div></div><div class="review-score">92</div></div><div class="review-text">アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。</div><div class="pills"><span class="pill">Grip</span><span class="pill">Stability</span><span class="pill">Heavy</span></div></div>
-    <div class="review-item"><div class="review-top"><div><div class="review-user">Ryuta_PG</div><div class="review-shoe">Sabrina 3</div></div><div class="review-score">89</div></div><div class="review-text">軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。</div><div class="pills"><span class="pill">Lightweight</span><span class="pill">Speed</span><span class="pill">Cushion</span></div></div>
-    <div class="review-item"><div class="review-top"><div><div class="review-user">Shonan_Baller</div><div class="review-shoe">Air Jordan 40</div></div><div class="review-score">85</div></div><div class="review-text">履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。</div><div class="pills"><span class="pill">Design</span><span class="pill">Cushion</span><span class="pill">Fit</span></div></div>
+    <div class="sec-head"><div class="sec-title">Latest Reviews</div><button class="filter-chip" id="comm-filter-btn" onclick="toggleCommFilter()">MY SHOES</button></div>
+    <div id="review-list"></div>
   </div>
   <div id="pane-add" style="display:none">
     <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb" onclick="switchTab('community')">Community</button></div>
@@ -212,7 +222,7 @@ function confirmDel(){var s=shoes[currentIdx];document.getElementById('confirm-t
 function quickDel(i){currentIdx=i;confirmDel()}
 function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open')}
 function doDelete(){shoes.splice(currentIdx,1);save();closeConfirm();closeSheet();renderList();}
-function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});if(name==='add')initPeriodPicker();}
+function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});if(name==='add')initPeriodPicker();if(name==='community')renderCommunity();}
 function norm(s){return(s||'').toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');}
 function matchScore(shoe,q){var nq=norm(q);if(!nq)return null;if(norm(shoe.b+shoe.n).includes(nq))return 100;if(nq.length>=2&&norm(shoe.n).includes(nq))return 90;for(var i=0;i<shoe.k.length;i++){if(norm(shoe.k[i]).includes(nq)||(nq.length>=2&&nq.includes(norm(shoe.k[i]))))return 80;}return null;}
 function onSInput(){
