@@ -4,194 +4,261 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <title>バッシュ.com</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="BashuLog">
+  <title>BashuLog</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-    :root{--bg:#fff;--bg2:#f8f8f6;--border:#e8e8e4;--border2:#d0d0ca;--ink:#111;--muted:#888880;--muted2:#bbbbb5;--sidebar:240px}
-    html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif}
-    .layout{display:flex;height:100vh;overflow:hidden}
-
-    /* SIDEBAR */
-    .sidebar{width:var(--sidebar);flex-shrink:0;background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:100}
-    .sidebar-logo{padding:26px 22px 22px;border-bottom:1px solid var(--border)}
-    .logo-main{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:3px}
-    .logo-sub{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-    .sidebar-section{padding:18px 14px 6px;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted2)}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:6px;margin:0 6px 2px;cursor:pointer;border:none;background:none;width:calc(100% - 12px);text-align:left;transition:background .15s}
-    .nav-item:hover{background:var(--bg2)}
-    .nav-item.active{background:var(--ink)}
-    .nav-item.active .nav-name,.nav-item.active .nav-tag{color:#fff}
-    .nav-item.active .nav-tag{opacity:.6}
-    .nav-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:var(--bg2);border:1px solid var(--border)}
-    .nav-item.active .nav-icon{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.2)}
-    .nav-text{flex:1;min-width:0}
-    .nav-name{font-size:12px;font-weight:500;color:var(--ink)}
-    .nav-tag{font-size:10px;color:var(--muted);margin-top:1px}
-    .coming{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:0 6px 2px;opacity:.35}
-    .coming-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg2);border:1px dashed var(--border2)}
-    .coming-label{font-size:11px;color:var(--muted);font-style:italic}
-    .sidebar-footer{margin-top:auto;padding:18px 22px;border-top:1px solid var(--border);font-size:10px;color:var(--muted2)}
-
-    /* MAIN */
-    .main{flex:1;overflow-y:auto;background:var(--bg2)}
-    .app-page{display:none;min-height:100%}
-    .app-page.active{display:block}
-
-    /* HERO */
-    .hero{background:var(--bg);border-bottom:1px solid var(--border);padding:44px 44px 36px}
-    .hero-top{display:flex;align-items:flex-start;gap:18px;margin-bottom:22px}
-    .hero-icon{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--bg2);border:1px solid var(--border);flex-shrink:0}
-    .hero-cat{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-    .hero-title{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.1;margin-bottom:8px}
-    .hero-desc{font-size:13px;color:var(--muted);line-height:1.75;max-width:520px}
-    .btn-launch{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:none;border-radius:4px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:opacity .15s}
-    .btn-launch:hover{opacity:.8}
-
-    /* BODY */
-    .body{padding:36px 44px;max-width:720px}
-    .sec-title{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
-    .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:36px}
-    .feat-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:18px}
-    .feat-icon{font-size:22px;margin-bottom:8px}
-    .feat-name{font-size:11px;font-weight:600;margin-bottom:4px}
-    .feat-text{font-size:11px;color:var(--muted);line-height:1.6}
-    .preview{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:36px}
-    .preview-bar{display:flex;align-items:center;gap:5px;padding:9px 12px;background:var(--bg2);border-bottom:1px solid var(--border)}
-    .dot{width:9px;height:9px;border-radius:50%;background:var(--border2)}
-    .preview-url{font-size:10px;color:var(--muted);margin-left:6px}
-    .preview-frame{width:100%;height:460px;border:none;display:block}
-
-    /* HOME */
-    .home-hero{background:var(--bg);border-bottom:1px solid var(--border);padding:56px 44px 44px}
-    .home-eye{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-    .home-title{font-family:'DM Serif Display',serif;font-size:44px;line-height:1.1;margin-bottom:14px}
-    .home-sub{font-size:14px;color:var(--muted);line-height:1.75;max-width:460px}
-    .home-body{padding:36px 44px}
-    .home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-    .home-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:22px;cursor:pointer;transition:all .15s}
-    .home-card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.06)}
-    .home-card-icon{font-size:28px;margin-bottom:14px}
-    .home-card-title{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:5px}
-    .home-card-desc{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px}
-    .home-card-cta{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink)}
-
-    /* MOBILE HEADER */
-    .mob-header{display:none;position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 18px;align-items:center;gap:10px}
-    .mob-menu{width:34px;height:34px;border:1px solid var(--border2);border-radius:6px;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-    .mob-menu span{display:block;width:14px;height:1.5px;background:var(--ink)}
-    .mob-title{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
-    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90}
-    .overlay.open{display:block}
-
-    @media(max-width:768px){
-      .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%)}
-      .sidebar.open{transform:translateX(0)}
-      .mob-header{display:flex}
-      .hero{padding:24px 18px 20px}
-      .hero-top{flex-direction:column;gap:12px}
-      .hero-title{font-size:26px}
-      .body{padding:22px 18px}
-      .home-hero{padding:32px 18px 24px}
-      .home-title{font-size:32px}
-      .home-body{padding:22px 18px}
-      .preview-frame{height:320px}
-    }
-  </style>
+    :root{--bg:#fff;--bg2:#f8f8f6;--border:#e8e8e4;--border2:#d0d0ca;--ink:#111;--muted:#888880;--muted2:#bbbbb5;--danger:#dc2626}
+    html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+    .app{max-width:560px;margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:60px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:50}
+    .logo{font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase}
+    .action-btn{width:40px;height:40px;border-radius:50%;background:var(--bg);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:background .15s}
+    .action-btn:hover{background:var(--bg2)}
+    .tabs{display:flex;gap:8px;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg)}
+    .tb{background:none;border:1px solid var(--border2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);padding:8px 18px;border-radius:4px;transition:all .15s}
+    .tb.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .sec-head{padding:28px 24px 20px;display:flex;align-items:baseline;justify-content:space-between}
+    .sec-title{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase}
+    .sec-sub{font-size:11px;color:var(--muted)}
+    .shoe-item{padding:22px 24px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+    .shoe-item:last-child{border-bottom:1px solid var(--border)}
+    .shoe-clickable{cursor:pointer}
+    .shoe-brand-lbl{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .shoe-name{font-family:'DM Serif Display',serif;font-size:24px;line-height:1.15;margin-bottom:8px}
+    .shoe-meta{font-size:11px;color:var(--muted);margin-bottom:8px}
+    .score-dots{display:flex;gap:3px}
+    .sdot{width:6px;height:6px;border-radius:50%;background:var(--border2)}
+    .sdot.on{background:var(--ink)}
+    .shoe-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .shoe-score-n{font-family:'DM Serif Display',serif;font-size:52px;line-height:1;cursor:pointer}
+    .shoe-score-lbl{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+    .del-btn{background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted2);padding:4px;line-height:1;transition:color .15s}
+    .del-btn:hover{color:var(--danger)}
+    .empty{padding:60px 24px;text-align:center}
+    .empty-icon{font-size:48px;margin-bottom:16px;opacity:.3}
+    .empty-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+    .empty-text{font-size:13px;color:var(--muted);line-height:1.7}
+    .empty-btn{margin-top:20px;display:inline-block;background:var(--ink);color:#fff;border:none;border-radius:4px;padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+    .review-item{padding:24px;border-top:1px solid var(--border)}
+    .review-item:last-child{border-bottom:1px solid var(--border)}
+    .review-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+    .review-user{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .review-shoe{font-family:'DM Serif Display',serif;font-size:26px;line-height:1.1}
+    .review-score{font-family:'DM Serif Display',serif;font-size:56px;line-height:1;flex-shrink:0}
+    .review-text{font-size:13px;line-height:1.75;margin-bottom:14px}
+    .pills{display:flex;gap:6px;flex-wrap:wrap}
+    .pill{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:3px;border:1px solid var(--border2)}
+    .sheet-bg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center}
+    .sheet-bg.open{display:flex}
+    .sheet{background:var(--bg);width:100%;max-width:560px;border-radius:16px 16px 0 0;max-height:90vh;overflow-y:auto;padding:0 0 40px;border-top:1px solid var(--border2)}
+    .sheet-drag{width:32px;height:3px;background:var(--border2);border-radius:2px;margin:14px auto 0}
+    .sheet-img{width:calc(100% - 48px);margin:20px 24px 0;aspect-ratio:4/3;background:var(--bg2);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:64px;color:var(--border2)}
+    .sheet-img img{width:100%;height:100%;object-fit:contain;padding:20px}
+    .sheet-body{padding:24px}
+    .sheet-brand{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .sheet-name{font-family:'DM Serif Display',serif;font-size:28px;line-height:1.15;margin-bottom:4px}
+    .sheet-period{font-size:11px;color:var(--muted);margin-bottom:16px}
+    .sheet-score-row{display:flex;align-items:baseline;gap:8px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:20px}
+    .sheet-score-n{font-family:'DM Serif Display',serif;font-size:64px;line-height:1}
+    .sheet-score-sub{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+    .metric{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--border)}
+    .metric:last-of-type{border-bottom:none}
+    .metric-name{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);width:80px;flex-shrink:0}
+    .metric-track{flex:1;height:2px;background:var(--border);position:relative;overflow:hidden}
+    .metric-fill{position:absolute;left:0;top:0;height:100%;background:var(--ink)}
+    .metric-n{font-family:'DM Serif Display',serif;font-size:22px;width:24px;text-align:right}
+    .sheet-comment{margin-top:16px;padding:14px 16px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--border2);font-size:13px;line-height:1.8;color:var(--muted);font-style:italic}
+    .sheet-actions{display:flex;gap:10px;margin:20px 24px 0}
+    .sheet-close{flex:1;background:var(--ink);color:#fff;border:none;border-radius:4px;padding:14px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+    .sheet-close:hover{opacity:.8}
+    .sheet-del{background:none;border:1px solid var(--border2);border-radius:4px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--danger);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .sheet-del:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+    .confirm-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:24px}
+    .confirm-bg.open{display:flex}
+    .confirm-box{background:var(--bg);border-radius:12px;padding:28px 24px;max-width:360px;width:100%;text-align:center}
+    .confirm-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+    .confirm-text{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+    .confirm-actions{display:flex;gap:10px}
+    .confirm-cancel{flex:1;background:none;border:1px solid var(--border2);border-radius:4px;padding:12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+    .confirm-ok{flex:1;background:var(--danger);color:#fff;border:none;border-radius:4px;padding:12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+    .add-wrap{padding:24px}
+    .add-title{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:24px}
+    .search-box{position:relative;margin-bottom:6px}
+    .search-input{width:100%;border:1px solid var(--border2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);padding:12px 40px 12px 14px;outline:none;transition:border-color .15s;background:var(--bg)}
+    .search-input:focus{border-color:var(--ink)}
+    .search-ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none}
+    .search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted);display:none;align-items:center}
+    .dd{border:1px solid var(--border2);border-radius:4px;background:var(--bg);box-shadow:0 4px 24px rgba(0,0,0,.08);display:none;max-height:280px;overflow-y:auto;margin-bottom:4px}
+    .dd.open{display:block}
+    .dd-head{padding:8px 14px 6px;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0}
+    .dd-opt{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
+    .dd-opt:last-child{border-bottom:none}
+    .dd-opt:hover{background:var(--bg2)}
+    .dd-brand{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+    .dd-name{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.2}
+    .dd-new{font-size:9px;font-weight:700;color:var(--muted);border:1px solid var(--border2);padding:2px 8px;border-radius:20px}
+    .sel-card{border:1px solid var(--ink);border-radius:4px;padding:14px 16px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between}
+    .sel-card.show{display:flex}
+    .sel-brand{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+    .sel-name{font-family:'DM Serif Display',serif;font-size:20px}
+    .sel-remove{background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted2)}
+    .photo-drop{width:100%;aspect-ratio:4/3;background:var(--bg2);border:1.5px dashed var(--border2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:20px;transition:border-color .15s;position:relative;overflow:hidden}
+    .photo-drop:hover{border-color:var(--ink)}
+    .photo-drop img.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px}
+    .photo-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);padding:11px 14px;outline:none;transition:border-color .15s}
+    .field input::placeholder,.field textarea::placeholder{color:var(--muted2)}
+    .field input:focus,.field textarea:focus{border-color:var(--ink)}
+    .field textarea{height:72px;resize:none}
+    .score-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:24px 0 16px}
+    .srow{margin-bottom:16px}
+    .srow-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+    .srow-cat{font-size:12px;font-weight:500}
+    .srow-val{font-family:'DM Serif Display',serif;font-size:28px}
+    input[type=range]{width:100%;cursor:pointer;-webkit-appearance:none;appearance:none;height:2px;background:var(--border);border-radius:2px;outline:none}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--ink);cursor:pointer}
+    input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ink);cursor:pointer;border:none}
+    .total-row{display:flex;align-items:baseline;gap:10px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:8px 0 24px}
+    .total-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .total-big{font-family:'DM Serif Display',serif;font-size:56px;line-height:1}
+    .total-denom{font-size:13px;color:var(--muted)}
+    .submit{width:100%;background:var(--ink);color:#fff;border:none;border-radius:4px;padding:15px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:opacity .15s}
+    .submit:hover{opacity:.8}
+    .submit:disabled{opacity:.4;cursor:not-allowed}
+    .scroll-hint{display:flex;justify-content:center;padding:20px;border-top:1px solid var(--border)}
+    .scroll-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px}
+ .period-range{margin-bottom:6px}.period-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}.period-row-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);width:28px;flex-shrink:0;padding-top:22px;text-align:center}.period-picker{display:flex;gap:8px;flex:1}.period-col{flex:1;position:relative}.period-col-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:4px}.pscroll-wrap{position:relative;border:1px solid var(--border2);border-radius:4px;overflow:hidden}.pscroll{height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.pscroll::-webkit-scrollbar{display:none}.pitem{height:40px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:12px;color:var(--muted2);transition:color .1s;user-select:none}.pitem.active{font-family:'DM Serif Display',serif;font-size:18px;color:var(--ink)}.pitem.pad{scroll-snap-align:none;visibility:hidden}.pscroll-wrap::before,.pscroll-wrap::after{content:'';position:absolute;left:0;right:0;height:40px;pointer-events:none;z-index:2}.pscroll-wrap::before{top:0;background:linear-gradient(to bottom,var(--bg) 10%,transparent 100%)}.pscroll-wrap::after{bottom:0;background:linear-gradient(to top,var(--bg) 10%,transparent 100%)}.pscroll-center{position:absolute;top:40px;left:0;right:0;height:40px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);pointer-events:none;z-index:1}.filter-chip{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .15s}.filter-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}.match-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--ink);color:#fff;margin-left:8px;vertical-align:middle}.review-match{background:var(--bg2)}  </style>
 </head>
 <body>
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-<div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-main">バッシュ.com</div>
-      <div class="logo-sub">Basketball Tools</div>
+<div class="app">
+  <div class="topbar"><div class="logo">Bashulog</div><button class="action-btn" onclick="switchTab('add')">+</button></div>
+  <div id="pane-collection">
+    <div class="tabs"><button class="tb on" onclick="switchTab('collection')">My Shoes</button><button class="tb" onclick="switchTab('community')">Community</button></div>
+    <div class="sec-head"><div class="sec-title">My Collection</div><div class="sec-sub" id="coll-count"></div></div>
+    <div id="shoe-list"></div>
+  </div>
+  <div id="pane-community" style="display:none">
+    <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb on" onclick="switchTab('community')">Community</button></div>
+    <div class="sec-head"><div class="sec-title">Latest Reviews</div><button class="filter-chip" id="comm-filter-btn" onclick="toggleCommFilter()">MY SHOES</button></div>
+    <div id="review-list"></div>
+  </div>
+  <div id="pane-add" style="display:none">
+    <div class="tabs"><button class="tb" onclick="switchTab('collection')">My Shoes</button><button class="tb" onclick="switchTab('community')">Community</button></div>
+    <div class="add-wrap">
+      <div class="add-title">Add New Shoe</div>
+      <div class="field"><label>Search Shoe</label><div class="search-box"><input class="search-input" id="q" placeholder="Kobe, KD, Curry, Luka..." autocomplete="off" oninput="onSInput()" onfocus="onSFocus()" onblur="onSBlur()"><span class="search-ico" id="sico">?</span><button class="search-clear" id="sclear" onclick="clearQ()">x</button></div><div class="dd" id="dd"></div><div class="sel-card" id="selcard"><div><div class="sel-brand" id="selbrand"></div><div class="sel-name" id="selname"></div></div><button class="sel-remove" onclick="clearSel()">x</button></div></div>
+      <div class="photo-drop" onclick="document.getElementById('fup').click()"><img class="prev" id="prev-img" style="display:none"><div id="ph-ph" style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:28px;opacity:.2">+</span><div class="photo-lbl">Add Photo (optional)</div></div><input type="file" id="fup" accept="image/*" style="display:none" onchange="handleImg(this)"></div>
+      <div class="field"><label>Period</label><div class="period-range"><div class="period-row"><div class="period-row-lbl">開始</div><div class="period-picker"><div class="period-col"><div class="period-col-lbl">年</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="sy-scroll"></div></div></div><div class="period-col"><div class="period-col-lbl">月</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="sm-scroll"></div></div></div></div></div><div class="period-row"><div class="period-row-lbl">終了</div><div class="period-picker"><div class="period-col"><div class="period-col-lbl">年</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="ey-scroll"></div></div></div><div class="period-col" id="em-col"><div class="period-col-lbl">月</div><div class="pscroll-wrap"><div class="pscroll-center"></div><div class="pscroll" id="em-scroll"></div></div></div></div></div></div><input type="hidden" id="fp"></div>
+      <div class="field"><label>Comment</label><textarea id="fc" placeholder="Fit, feel, pros, cons..."></textarea></div>
+      <div class="score-lbl">Score</div>
+      <div class="srow"><div class="srow-top"><span class="srow-cat">Cushion</span><span class="srow-val" id="sv0">8</span></div><input type="range" min="1" max="10" value="8" step="1" id="sr0" oninput="sv('sv0',this.value);rc()"></div>
+      <div class="srow"><div class="srow-top"><span class="srow-cat">Grip</span><span class="srow-val" id="sv1">8</span></div><input type="range" min="1" max="10" value="8" step="1" id="sr1" oninput="sv('sv1',this.value);rc()"></div>
+      <div class="srow"><div class="srow-top"><span class="srow-cat">Fit</span><span class="srow-val" id="sv2">8</span></div><input type="range" min="1" max="10" value="8" step="1" id="sr2" oninput="sv('sv2',this.value);rc()"></div>
+      <div class="srow"><div class="srow-top"><span class="srow-cat">Weight</span><span class="srow-val" id="sv3">7</span></div><input type="range" min="1" max="10" value="7" step="1" id="sr3" oninput="sv('sv3',this.value);rc()"></div>
+      <div class="srow"><div class="srow-top"><span class="srow-cat">Support</span><span class="srow-val" id="sv4">8</span></div><input type="range" min="1" max="10" value="8" step="1" id="sr4" oninput="sv('sv4',this.value);rc()"></div>
+      <div class="total-row"><div class="total-lbl">Total Score</div><div class="total-big" id="tnum">78</div><div class="total-denom">/ 100</div></div>
+      <button class="submit" id="submit-btn" onclick="addShoe()">Add to Collection</button>
     </div>
-    <div class="sidebar-section">Apps</div>
-    <button class="nav-item active" id="nav-home" onclick="showPage('home')">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-text"><div class="nav-name">ホーム</div><div class="nav-tag">トップ</div></div>
-    </button>
-    <button class="nav-item" id="nav-bashulog" onclick="showPage('bashulog')">
-      <div class="nav-icon">👟</div>
-      <div class="nav-text"><div class="nav-name">BashuLog</div><div class="nav-tag">コレクション管理</div></div>
-    </button>
-    <div class="sidebar-section" style="margin-top:6px">Coming Soon</div>
-    <div class="coming"><div class="coming-icon">＋</div><div class="coming-label">次のアプリ…</div></div>
-    <div class="sidebar-footer">© 2026 バッシュ.com</div>
-  </aside>
-
-  <main class="main">
-    <div class="mob-header">
-      <button class="mob-menu" onclick="openSidebar()"><span></span><span></span><span></span></button>
-      <div class="mob-title" id="mob-title">バッシュ.com</div>
-    </div>
-
-    <!-- HOME -->
-    <div class="app-page active" id="page-home">
-      <div class="home-hero">
-        <div class="home-eye">Basketball Tools</div>
-        <div class="home-title">バスケを、もっと<br><em>深く楽しむ。</em></div>
-        <div class="home-sub">バスケットボールプレイヤーのためのツール集。シューズのコレクション管理から、プレイヤー分析まで。</div>
-      </div>
-      <div class="home-body">
-        <div class="sec-title">すべてのアプリ</div>
-        <div class="home-grid">
-          <div class="home-card" onclick="showPage('bashulog')">
-            <div class="home-card-icon">👟</div>
-            <div class="home-card-title">BashuLog</div>
-            <div class="home-card-desc">持っているバッシュをスコアで記録・管理。クッション、グリップ、フィット感など5項目で評価できます。</div>
-            <div class="home-card-cta">使ってみる →</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BASHULOG -->
-    <div class="app-page" id="page-bashulog">
-      <div class="hero">
-        <div class="hero-top">
-          <div class="hero-icon">👟</div>
-          <div>
-            <div class="hero-cat">コレクション管理</div>
-            <div class="hero-title">BashuLog</div>
-            <div class="hero-desc">持っているバッシュをスコアで記録・管理するアプリ。クッション、グリップ、フィット感、重さ、サポートの5項目で評価し、自分だけのバッシュコレクションを作ろう。コミュニティで他のプレイヤーのレビューも参考にできます。</div>
-          </div>
-        </div>
-        <a class="btn-launch" href="bashulog.html" target="_blank">アプリを開く ↗</a>
-      </div>
-      <div class="body">
-        <div class="sec-title">特徴</div>
-        <div class="feat-grid">
-          <div class="feat-card"><div class="feat-icon">⭐</div><div class="feat-name">5項目スコア</div><div class="feat-text">クッション・グリップ・フィット・重さ・サポートで100点評価</div></div>
-          <div class="feat-card"><div class="feat-icon">📸</div><div class="feat-name">写真登録</div><div class="feat-text">実際のシューズ写真を撮って一緒に保存できる</div></div>
-          <div class="feat-card"><div class="feat-icon">👥</div><div class="feat-name">コミュニティ</div><div class="feat-text">他のプレイヤーのレビューを参考に次の1足を選ぼう</div></div>
-          <div class="feat-card"><div class="feat-icon">📅</div><div class="feat-name">使用期間管理</div><div class="feat-text">いつからいつまで使ったか期間で記録できる</div></div>
-        </div>
-        <div class="sec-title">アプリプレビュー</div>
-        <div class="preview">
-          <div class="preview-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="preview-url">bashulog.html</div></div>
-          <iframe class="preview-frame" src="bashulog.html" title="BashuLog"></iframe>
-        </div>
-      </div>
-    </div>
-  </main>
+  </div>
+  <div class="sheet-bg" id="sheet-bg" onclick="bgClick(event)"><div class="sheet"><div class="sheet-drag"></div><div class="sheet-img" id="sh-img">?</div><div class="sheet-body"><div class="sheet-brand" id="sh-brand"></div><div class="sheet-name" id="sh-name"></div><div class="sheet-period" id="sh-period"></div><div class="sheet-score-row"><div class="sheet-score-n" id="sh-score"></div><div><div class="sheet-score-sub">Overall Score</div></div></div><div id="sh-metrics"></div><div class="sheet-comment" id="sh-comment"></div></div><div class="sheet-actions"><button class="sheet-del" onclick="confirmDel()">Delete</button><button class="sheet-close" onclick="closeSheet()">Close</button></div></div></div>
+  <div class="confirm-bg" id="confirm-bg"><div class="confirm-box"><div class="confirm-title">Delete?</div><div class="confirm-text" id="confirm-text"></div><div class="confirm-actions"><button class="confirm-cancel" onclick="closeConfirm()">Cancel</button><button class="confirm-ok" onclick="doDelete()">Delete</button></div></div></div>
 </div>
 <script>
-var titles={home:'バッシュ.com',bashulog:'BashuLog'};
-function showPage(id){
-  document.querySelectorAll('.app-page').forEach(function(p){p.classList.remove('active');});
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
-  document.getElementById('nav-'+id).classList.add('active');
-  document.getElementById('mob-title').textContent=titles[id]||'バッシュ.com';
-  document.querySelector('.main').scrollTop=0;
-  closeSidebar();
+var DB=[{b:'Nike',n:'Kobe 8 Protro',k:['kobe8','kobe','protro','viii']},{b:'Nike',n:'Kobe 6 Protro',k:['kobe6','vi']},{b:'Nike',n:'LeBron 21',k:['lebron21','lebron','lbj']},{b:'Nike',n:'LeBron 22',k:['lebron22']},{b:'Nike',n:'KD 18',k:['kd18','kd','durant']},{b:'Nike',n:'KD 17',k:['kd17']},{b:'Nike',n:'Zoom Freak 6',k:['freak6','giannis']},{b:'Nike',n:'PG 8',k:['pg8','pg']},{b:'Nike',n:'Kyrie Flytrap 6',k:['kyrie','flytrap']},{b:'Nike',n:'Sabrina 3',k:['sabrina3','sabrina','ionescu']},{b:'Nike',n:'Sabrina 2',k:['sabrina2']},{b:'Nike',n:'Book 1',k:['book1','booker']},{b:'Nike',n:'Air Jordan 40',k:['aj40','jordan40']},{b:'Nike',n:'Air Jordan 39',k:['aj39','jordan39']},{b:'Nike',n:'Zoom GT Cut 3',k:['gtcut3','gtcut']},{b:'Jordan Brand',n:'Luka 3',k:['luka3','luka','doncic']},{b:'Jordan Brand',n:'Luka 2',k:['luka2']},{b:'Jordan Brand',n:'Tatum 3',k:['tatum3','tatum']},{b:'Jordan Brand',n:'Zion 3',k:['zion3','zion']},{b:'Under Armour',n:'Curry 12',k:['curry12','curry','steph']},{b:'Under Armour',n:'Curry 11',k:['curry11']},{b:'Under Armour',n:'Curry 10',k:['curry10']},{b:'Under Armour',n:'Flow Breakthru 5',k:['breakthru5','breakthru']},{b:'Adidas',n:'Harden Vol. 8',k:['harden8','harden']},{b:'Adidas',n:'Trae Young 3',k:['trae3','trae']},{b:'Adidas',n:'D.O.N. Issue 6',k:['don6','mitchell','donovan']},{b:'Adidas',n:'Anthony Edwards 1',k:['ae1','edwards']},{b:'Adidas',n:'Anthony Edwards 2',k:['ae2']},{b:'Puma',n:'MB.04',k:['mb04','lamelo']},{b:'Puma',n:'MB.03',k:['mb03']},{b:'Puma',n:'Scoot Zeros',k:['scoot','henderson']},{b:'New Balance',n:'TWO WXY v5',k:['twowxy5','twowxy']},{b:'New Balance',n:'Kawhi 4',k:['kawhi4','kawhi','leonard']},{b:'ASICS',n:'Nova Surge 3',k:['novasurge3','novasurge']},{b:'ASICS',n:'Nova Surge 2',k:['novasurge2']},{b:'ASICS',n:'Unpre Amps',k:['unpre','amps']},{b:'ASICS',n:'Gel-Burst 25',k:['gelburst','gelburst25']},{b:'ASICS',n:'Gel-Hoop V17',k:['gelhoop','gelhoop17']},{b:'Mizuno',n:'Wave Momentum 3',k:['momentum3','momentum']},{b:'Li-Ning',n:'Way of Wade 12',k:['wade12','wade']},{b:'Anta',n:'KT9',k:['kt9','klay']},{b:'Anta',n:'KT8',k:['kt8']},];
+var COMMUNITY=[
+  {user:'Kenta_Hoops',shoe:'Nike KD 18',score:92,text:'アウトソールのグリップが神。ペリメーター守備で一度も滑ったことない。重さはあるが安定感が逆に武器になる。',pills:['Grip','Stability','Heavy']},
+  {user:'Ryuta_PG',shoe:'Sabrina 3',score:89,text:'軽くてクイックネスが活きる。クッション薄めで長時間はきつくなるが、試合用としては最高の選択肢。',pills:['Lightweight','Speed','Cushion']},
+  {user:'Shonan_Baller',shoe:'Air Jordan 40',score:85,text:'履くだけでモチベが上がるデザイン。Zoom Airも文句なし。幅広の人はフィットに注意。',pills:['Design','Cushion','Fit']},
+  {user:'Osaka_Wing',shoe:'Nike Kobe 8 Protro',score:91,text:'軽さと反応速度が最高。アウトソールのパターンが特にコートでのグリップに貢献。コービーモデルの中でも一番バランスが取れてる。',pills:['Lightweight','Grip','Responsive']},
+  {user:'Sapporo_Big',shoe:'Under Armour Curry 12',score:88,text:'カリーのシグネチャーモデルで一番しっくりきた。ミッドソールのクッションが長時間プレーでも足が疲れない。',pills:['Cushion','Fit','Durable']},
+];
+var commFilter=false;
+function normShoe(s){return(s||'').toLowerCase().replace(/s+/g,'').replace(/[^a-z0-9]/g,'');}
+function isMyShoe(cs){var cn=normShoe(cs);return shoes.some(function(s){return cn.includes(normShoe(s.model));});}
+function toggleCommFilter(){commFilter=!commFilter;renderCommunity();}
+function renderCommunity(){var btn=document.getElementById('comm-filter-btn');if(btn)btn.classList.toggle('on',commFilter);var list=document.getElementById('review-list');if(!list)return;var data=commFilter?COMMUNITY.filter(function(r){return isMyShoe(r.shoe);}):COMMUNITY;if(!data.length){list.innerHTML='<div class="empty"><div class="empty-title">No matches</div><div class="empty-text">コレクションと一致するレビューが見つかりませんでした</div></div>';return;}list.innerHTML=data.map(function(r){var mine=isMyShoe(r.shoe);var badge=mine?'<span class="match-badge">MY SHOES</span>':'';var pills=r.pills.map(function(p){return'<span class="pill">'+p+'</span>';}).join('');return'<div class="review-item'+(mine?' review-match':'')+'"><div class="review-top"><div><div class="review-user">'+r.user+badge+'</div><div class="review-shoe">'+r.shoe+'</div></div><div class="review-score">'+r.score+'</div></div><div class="review-text">'+r.text+'</div><div class="pills">'+pills+'</div></div>';}).join('');}
+var shoes=JSON.parse(localStorage.getItem('bashulog_shoes')||'[]');
+var currentIdx=-1,selectedShoe=null,pendingImg='';
+var cats=[{k:'c',l:'Cushion'},{k:'g',l:'Grip'},{k:'f',l:'Fit'},{k:'w',l:'Weight'},{k:'s',l:'Support'}];
+function save(){localStorage.setItem('bashulog_shoes',JSON.stringify(shoes))}
+function calcScore(s){return Math.round((s.c+s.g+s.f+s.w+s.s)/5*10)}
+function renderList(){
+  var el=document.getElementById('shoe-list'),n=shoes.length;
+  document.getElementById('coll-count').textContent=n?n+' pairs':'';
+  if(!n){el.innerHTML='<div class="empty"><div class="empty-icon">?</div><div class="empty-title">No shoes yet</div><div class="empty-text">Add your first pair to get started</div><button class="empty-btn" onclick="switchTab(\'add\')">+ Add First Shoe</button></div>';return;}
+  el.innerHTML='';
+  shoes.forEach(function(s,i){
+    var sc=calcScore(s),dots='<div class="score-dots">';
+    for(var d=1;d<=10;d++)dots+='<div class="sdot'+(d<=Math.round(sc/10)?' on':'')+'"></div>';
+    dots+='</div>';
+    var item=document.createElement('div');item.className='shoe-item';
+    item.innerHTML='<div class="shoe-clickable" onclick="openSheet('+i+')">'+'<div class="shoe-brand-lbl">'+s.brand+'</div><div class="shoe-name">'+s.model+'</div><div class="shoe-meta">'+s.period+'</div>'+dots+'</div>'+'<div class="shoe-right"><div onclick="openSheet('+i+')" style="cursor:pointer;text-align:right"><div class="shoe-score-n">'+sc+'</div><div class="shoe-score-lbl">Score</div></div><button class="del-btn" onclick="quickDel('+i+')" title="Delete">x</button></div>';
+    el.appendChild(item);
+  });
 }
-function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('open');}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function openSheet(i){
+  currentIdx=i;var s=shoes[i],sc=calcScore(s);
+  document.getElementById('sh-img').innerHTML=s.img?'<img src="'+s.img+'">':'?';
+  document.getElementById('sh-brand').textContent=s.brand;
+  document.getElementById('sh-name').textContent=s.model;
+  document.getElementById('sh-period').textContent=s.period;
+  document.getElementById('sh-score').textContent=sc;
+  document.getElementById('sh-metrics').innerHTML=cats.map(function(c){return'<div class="metric"><div class="metric-name">'+c.l+'</div><div class="metric-track"><div class="metric-fill" style="width:'+(s[c.k]*10)+'%"></div></div><div class="metric-n">'+s[c.k]+'</div></div>';}).join('');
+  document.getElementById('sh-comment').textContent=s.comment||'-';
+  document.getElementById('sheet-bg').classList.add('open');
+}
+function closeSheet(){document.getElementById('sheet-bg').classList.remove('open')}
+function bgClick(e){if(e.target===document.getElementById('sheet-bg'))closeSheet()}
+function confirmDel(){var s=shoes[currentIdx];document.getElementById('confirm-text').textContent='Delete "'+s.brand+' '+s.model+'"? This cannot be undone.';document.getElementById('confirm-bg').classList.add('open');}
+function quickDel(i){currentIdx=i;confirmDel()}
+function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open')}
+function doDelete(){shoes.splice(currentIdx,1);save();closeConfirm();closeSheet();renderList();}
+function switchTab(name){['collection','community','add'].forEach(function(t){document.getElementById('pane-'+t).style.display=t===name?'block':'none';});if(name==='add')initPeriodPicker();if(name==='community')renderCommunity();}
+function norm(s){return(s||'').toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');}
+function matchScore(shoe,q){var nq=norm(q);if(!nq)return null;if(norm(shoe.b+shoe.n).includes(nq))return 100;if(nq.length>=2&&norm(shoe.n).includes(nq))return 90;for(var i=0;i<shoe.k.length;i++){if(norm(shoe.k[i]).includes(nq)||(nq.length>=2&&nq.includes(norm(shoe.k[i]))))return 80;}return null;}
+function onSInput(){
+  var q=document.getElementById('q').value;
+  document.getElementById('sclear').style.display=q?'flex':'none';
+  document.getElementById('sico').style.display=q?'none':'flex';
+  if(!q){document.getElementById('dd').classList.remove('open');return;}
+  var res=DB.map(function(s){return{shoe:s,sc:matchScore(s,q)}}).filter(function(r){return r.sc!==null}).sort(function(a,b){return b.sc-a.sc}).slice(0,10);
+  var dd=document.getElementById('dd');dd.classList.add('open');
+  var html=res.length?'<div class="dd-head">Matches ('+res.length+')</div>':'';
+  res.forEach(function(r){var bn=r.shoe.b.replace(/'/g,"\'"),nn=r.shoe.n.replace(/'/g,"\'");html+='<div class="dd-opt" data-brand="'+bn+'" data-name="'+nn+'" onmousedown="selShoe(this.dataset.brand,this.dataset.name)"><div><div class="dd-brand">'+r.shoe.b+'</div><div class="dd-name">'+r.shoe.n+'</div></div></div>';});
+  html+='<div class="dd-opt" data-brand="Custom" data-name="'+q.replace(/"/g,'&amp;quot;')+'" onmousedown="selShoe(this.dataset.brand,this.dataset.name)"><div><div class="dd-brand">Not found?</div><div class="dd-name">Add "'+q+'" as new</div></div><div class="dd-new">+NEW</div></div>';
+  dd.innerHTML=html;
+}
+function onSFocus(){if(document.getElementById('q').value)onSInput()}
+function onSBlur(){setTimeout(function(){document.getElementById('dd').classList.remove('open')},180)}
+function clearQ(){document.getElementById('q').value='';document.getElementById('dd').classList.remove('open');document.getElementById('sclear').style.display='none';document.getElementById('sico').style.display='flex';}
+function selShoe(brand,name){selectedShoe={brand:brand,name:name};document.getElementById('selbrand').textContent=brand;document.getElementById('selname').textContent=name;document.getElementById('selcard').classList.add('show');clearQ();}
+function clearSel(){selectedShoe=null;document.getElementById('selcard').classList.remove('show');}
+function handleImg(input){var f=input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){pendingImg=e.target.result;document.getElementById('prev-img').src=pendingImg;document.getElementById('prev-img').style.display='block';document.getElementById('ph-ph').style.display='none';};r.readAsDataURL(f);}
+function sv(id,v){document.getElementById(id).textContent=v}
+function rc(){var vals=[0,1,2,3,4].map(function(i){return+document.getElementById('sr'+i).value});document.getElementById('tnum').textContent=Math.round(vals.reduce(function(a,b){return a+b},0)/5*10);}
+function addShoe(){
+  if(!selectedShoe){alert('シューズを検索・選択してください');return}
+  shoes.unshift({brand:selectedShoe.brand,model:selectedShoe.name,period:document.getElementById('fp').value||'-',comment:document.getElementById('fc').value||'',c:+document.getElementById('sr0').value,g:+document.getElementById('sr1').value,f:+document.getElementById('sr2').value,w:+document.getElementById('sr3').value,s:+document.getElementById('sr4').value,img:pendingImg,});
+  save();selectedShoe=null;pendingImg='';
+  document.getElementById('selcard').classList.remove('show');document.getElementById('prev-img').style.display='none';document.getElementById('ph-ph').style.display='flex';
+  document.getElementById('fc').value='';initPeriodPicker();
+  [0,1,2,3,4].forEach(function(i){var def=[8,8,8,7,8][i];document.getElementById('sr'+i).value=def;document.getElementById('sv'+i).textContent=def;});
+  document.getElementById('tnum').textContent=78;document.getElementById('submit-btn').disabled=true;
+  renderList();switchTab('collection');
+}
+function initPeriodPicker(){var n=new Date(),cy=n.getFullYear(),cm=n.getMonth()+1;var sy=document.getElementById('sy-scroll'),sm=document.getElementById('sm-scroll'),ey=document.getElementById('ey-scroll'),em=document.getElementById('em-scroll');if(!sy||!sm||!ey||!em)return;var yrs=[];for(var y=2015;y<=cy+1;y++)yrs.push(y);var mns=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];function buildY(el,wp){el.innerHTML='<div class="pitem pad"></div>';yrs.forEach(function(y){el.innerHTML+='<div class="pitem" data-v="'+y+'">'+y+'</div>';});if(wp)el.innerHTML+='<div class="pitem" data-v="present">現在</div>';el.innerHTML+='<div class="pitem pad"></div>';}function buildM(el){el.innerHTML='<div class="pitem pad"></div>';mns.forEach(function(m,i){el.innerHTML+='<div class="pitem" data-v="'+(i+1)+'">'+m+'</div>';});el.innerHTML+='<div class="pitem pad"></div>';}buildY(sy,false);buildM(sm);buildY(ey,true);buildM(em);function gi(el){return Math.round(el.scrollTop/40);}function ua(el){var idx=gi(el);el.querySelectorAll('.pitem').forEach(function(it,i){it.classList.toggle('active',i===idx+1);});}function ufp(){var syi=gi(sy),smi=gi(sm),eyi=gi(ey),emi=gi(em);var sya=sy.querySelectorAll('.pitem[data-v]'),sma=sm.querySelectorAll('.pitem[data-v]'),eya=ey.querySelectorAll('.pitem[data-v]'),ema=em.querySelectorAll('.pitem[data-v]');var syv=sya[syi]?sya[syi].dataset.v:'',smv=sma[smi]?sma[smi].dataset.v:'',eyv=eya[eyi]?eya[eyi].dataset.v:'',emv=ema[emi]?ema[emi].dataset.v:'';var emcol=document.getElementById('em-col');if(eyv==='present'){if(emcol)emcol.style.visibility='hidden';document.getElementById('fp').value=syv+'年'+smv+'月～現在';}else{if(emcol)emcol.style.visibility='visible';document.getElementById('fp').value=syv+'年'+smv+'月～'+eyv+'年'+emv+'月';}}function os(el){clearTimeout(el._t);el._t=setTimeout(function(){var s=Math.round(el.scrollTop/40)*40;if(Math.abs(el.scrollTop-s)>1)el.scrollTo({top:s,behavior:'smooth'});ua(el);ufp();},80);ua(el);}sy.addEventListener('scroll',function(){os(sy);});sm.addEventListener('scroll',function(){os(sm);});ey.addEventListener('scroll',function(){os(ey);});em.addEventListener('scroll',function(){os(em);});var syd=yrs.indexOf(cy);if(syd<0)syd=yrs.length-1;sy.scrollTop=syd*40;sm.scrollTop=(cm-1)*40;ey.scrollTop=yrs.length*40;em.scrollTop=(cm-1)*40;setTimeout(function(){ua(sy);ua(sm);ua(ey);ua(em);ufp();},50);}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+renderList();
+initPeriodPicker();
 </script>
 </body>
-</html>
+</html><!DOCTYPE html>
